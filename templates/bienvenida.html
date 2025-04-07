@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Bienvenido</title>
 </head>
 <body>
-    <h2>¡Bienvenido, usuario autenticado! 🎉</h2>
-    <p>Has ingresado correctamente.</p>
-    <img src="imagen.jpg" alt="Imagen de bienvenida" style="width:300px;height:200px;">
-
+    <h1>✅ Bienvenido, sesión iniciada</h1>
+    <img src="{{ url_for('static', filename='imagen.jpg') }}" alt="Imagen bienvenida" width="300">
 </body>
 </html>
