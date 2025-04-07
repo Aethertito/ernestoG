@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 import hashlib
 
 app = Flask(__name__)
+app.secret_key = "clave_secreta_segura_123"  
 
-# Usuario registrado
 usuarios_registrados = {
     "lauro": hashlib.sha256("soto".encode()).hexdigest()
 }
@@ -25,6 +25,3 @@ def login():
 @app.route("/bienvenida")
 def bienvenida():
     return render_template("bienvenida.html")
-
-if __name__ == "__main__":
-    app.run(debug=True)
