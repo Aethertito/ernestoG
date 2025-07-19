@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Estadísticas -->
+<div class="stats-row">
+    <div class="stat-box">
+        <span class="stat-number">{{ total_todos }}</span>
+        <div class="stat-label">Total TODOs</div>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number">{{ pending_todos }}</span>
+        <div class="stat-label">Pendientes</div>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number">{{ completed_todos }}</span>
+        <div class="stat-label">Completados</div>
+    </div>
+</div>
+
+<!-- Acciones Rápidas -->
+<div class="simple-card">
+    <h3 style="margin-bottom: 15px; color: #2c3e50;">Acciones Rápidas</h3>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'todos:todo_create' %}" class="btn btn-green">➕ Nuevo TODO</a>
+        <a href="{% url 'todos:sync' %}" class="btn btn-orange">🔄 Sincronizar</a>
+        <a href="{% url 'todos:todo_list_full' %}" class="btn">📋 Ver Todos</a>
+        <a href="/admin/" class="btn btn-gray" target="_blank">⚙️ Admin</a>
+    </div>
+</div>
+
+<!-- Listas Disponibles -->
+<div class="simple-card">
+    <h3 style="margin-bottom: 15px; color: #2c3e50;">Listas Disponibles</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        
+        <!-- Solo IDs -->
+        <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 4px;">
+            <h4 style="margin: 0 0 10px 0; color: #34495e;">🆔 Solo Identificadores</h4>
+            <p style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 0.9rem;">Lista que muestra únicamente los IDs</p>
+            <a href="{% url 'todos:todos_ids_only' %}" class="btn">Ver Lista</a>
+        </div>
+
+        <!-- IDs + Títulos -->
+        <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 4px;">
+            <h4 style="margin: 0 0 10px 0; color: #34495e;">📝 IDs + Títulos</h4>
+            <p style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 0.9rem;">IDs con títulos de tareas</p>
+            <a href="{% url 'todos:todos_ids_titles' %}" class="btn">Todos</a>
+            <a href="{% url 'todos:todos_pending_ids_titles' %}" class="btn btn-orange">Pendientes</a>
+            <a href="{% url 'todos:todos_completed_ids_titles' %}" class="btn btn-green">Completados</a>
+        </div>
+
+        <!-- IDs + Usuarios -->
+        <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 4px;">
+            <h4 style="margin: 0 0 10px 0; color: #34495e;">👤 IDs + Usuarios</h4>
+            <p style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 0.9rem;">IDs con identificadores de usuario</p>
+            <a href="{% url 'todos:todos_ids_userids' %}" class="btn">Todos</a>
+            <a href="{% url 'todos:todos_pending_ids_userids' %}" class="btn btn-orange">Pendientes</a>
+            <a href="{% url 'todos:todos_completed_ids_userids' %}" class="btn btn-green">Completados</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Información del Sistema -->
+<div class="simple-card">
+    <h3 style="margin-bottom: 15px; color: #2c3e50;">Estado del Sistema</h3>
+    <div style="font-size: 0.9rem; color: #7f8c8d;">
+        <p><strong>Base de datos:</strong> PostgreSQL (parradev)</p>
+        <p><strong>API externa:</strong> JSONPlaceholder</p>
+        <p><strong>Última sincronización:</strong> Datos actualizados</p>
+    </div>
+</div>
+{% endblock %}

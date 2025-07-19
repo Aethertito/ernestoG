@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Parra's Dev - Pizarra de Pendientes{% endblock %}</title>
+    <style>
+        /* DISEÑO SIMPLE Y ÚNICO CON SIDEBAR */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* SIDEBAR IZQUIERDO */
+        .sidebar {
+            width: 280px;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: #34495e;
+            text-align: center;
+            border-bottom: 1px solid #4a5f7a;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+        
+        .nav-section {
+            margin-bottom: 30px;
+        }
+        
+        .nav-title {
+            padding: 0 20px 10px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #95a5a6;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #34495e;
+            border-left-color: #3498db;
+            color: white;
+        }
+        
+        .nav-item i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        /* CONTENIDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: white;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .content-area {
+            padding: 30px;
+        }
+        
+        /* COMPONENTES SIMPLES */
+        .simple-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* TABLA SIMPLE */
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .simple-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .simple-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .simple-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* BOTONES SIMPLES */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-green { background: #27ae60; }
+        .btn-green:hover { background: #229954; }
+        
+        .btn-red { background: #e74c3c; }
+        .btn-red:hover { background: #c0392b; }
+        
+        .btn-orange { background: #f39c12; }
+        .btn-orange:hover { background: #e67e22; }
+        
+        .btn-gray { background: #95a5a6; }
+        .btn-gray:hover { background: #7f8c8d; }
+        
+        /* FORMULARIOS SIMPLES */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        /* ESTADOS */
+        .status-done {
+            background: #d5f4e6;
+            color: #27ae60;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fdeaa7;
+            color: #f39c12;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* TODO ITEMS */
+        .todo-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .todo-item.completed {
+            border-left-color: #27ae60;
+            opacity: 0.8;
+        }
+        
+        .todo-item .todo-id {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .todo-item .todo-title {
+            margin: 8px 0;
+            color: #34495e;
+            line-height: 1.4;
+        }
+        
+        .todo-item .todo-user {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+            }
+            
+            .content-area {
+                padding: 15px;
+            }
+            
+            .top-bar {
+                padding: 10px 15px;
+            }
+        }
+        
+        /* MENSAJES */
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            border-left: 4px solid;
+        }
+        
+        .message.success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-left-color: #27ae60;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #e74c3c;
+            border-left-color: #e74c3c;
+        }
+        
+        /* UTILIDADES */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-20 { margin-bottom: 20px; }
+        .mt-20 { margin-top: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR IZQUIERDO -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Parra's Dev</h1>
+                <p>Sistema de TODOs</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <!-- Dashboard -->
+                <div class="nav-section">
+                    <div class="nav-title">Principal</div>
+                    <a href="{% url 'todos:index' %}" class="nav-item">
+                        <i>🏠</i> Dashboard
+                    </a>
+                    <a href="{% url 'todos:sync' %}" class="nav-item">
+                        <i>🔄</i> Sincronizar API
+                    </a>
+                </div>
+
+                <!-- Listas Solicitadas -->
+                <div class="nav-section">
+                    <div class="nav-title">Listas Solicitadas</div>
+                    <a href="{% url 'todos:todos_ids_only' %}" class="nav-item">
+                        <i>🆔</i> Solo IDs
+                    </a>
+                    <a href="{% url 'todos:todos_ids_titles' %}" class="nav-item">
+                        <i>�</i> IDs + Títulos
+                    </a>
+                    <a href="{% url 'todos:todos_ids_userids' %}" class="nav-item">
+                        <i>👤</i> IDs + Usuarios
+                    </a>
+                </div>
+
+                <!-- Por Estado -->
+                <div class="nav-section">
+                    <div class="nav-title">Por Estado</div>
+                    <a href="{% url 'todos:todos_pending_ids_titles' %}" class="nav-item">
+                        <i>⏳</i> Pendientes
+                    </a>
+                    <a href="{% url 'todos:todos_completed_ids_titles' %}" class="nav-item">
+                        <i>✅</i> Completados
+                    </a>
+                </div>
+
+                <!-- Gestión -->
+                <div class="nav-section">
+                    <div class="nav-title">Gestión</div>
+                    <a href="{% url 'todos:todo_list_full' %}" class="nav-item">
+                        <i>📋</i> Lista Completa
+                    </a>
+                    <a href="{% url 'todos:todo_create' %}" class="nav-item">
+                        <i>➕</i> Crear TODO
+                    </a>
+                    <a href="/admin/" class="nav-item" target="_blank">
+                        <i>⚙️</i> Admin Panel
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+                <div class="top-actions">
+                    <span style="font-size: 0.85rem; color: #7f8c8d;">{{ user.username|default:"Invitado" }}</span>
+                </div>
+            </div>
+
+            <div class="content-area">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para cambiar estado de TODO vía AJAX
+        function toggleTodoStatus(todoId) {
+            fetch(`/toggle/${todoId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cambiar el estado del TODO');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h2>{{ title }}</h2>
+
+    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%); 
+                border: 2px solid var(--danger); 
+                border-radius: 16px; 
+                padding: 2rem; 
+                text-align: center; 
+                margin-bottom: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+        <h3 style="color: var(--danger); margin-bottom: 1rem;">¿Confirmar eliminación?</h3>
+        <p style="color: var(--text-light); font-size: 1.1rem;">
+            Esta acción no se puede deshacer. El TODO será eliminado permanentemente.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 1.5rem; color: var(--text);">Detalles del TODO a eliminar:</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">ID</label>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">#{{ todo.api_id }}</div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Usuario</label>
+                <div style="font-size: 1.1rem; font-weight: 600;">Usuario {{ todo.user_id }}</div>
+            </div>
+            
+            <div style="grid-column: 1 / -1;">
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Título</label>
+                <div style="font-size: 1rem; line-height: 1.5; margin-top: 0.5rem; color: var(--text);">{{ todo.title }}</div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Estado</label>
+                <div style="margin-top: 0.5rem;">
+                    <span class="{% if todo.completed %}status-completed{% else %}status-pending{% endif %}">
+                        {{ todo.status_display }}
+                    </span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="font-size: 1rem; padding: 1rem 2rem;">
+                🗑️ Sí, eliminar TODO
+            </button>
+        </form>
+        
+        <a href="{% url 'todos:todo_detail' todo.api_id %}" class="btn btn-success" style="font-size: 1rem; padding: 1rem 2rem;">
+            ❌ No, cancelar
+        </a>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'todos:todo_list_full' %}" class="btn">📋 Volver a Lista</a>
+        <a href="{% url 'todos:index' %}" class="btn">🏠 Dashboard</a>
+    </div>
+</div>
+{% endblock %}

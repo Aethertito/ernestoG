@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h2>{{ title }}</h2>
+
+    <div class="card">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">ID de la API</label>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">#{{ todo.api_id }}</div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Usuario</label>
+                <div style="font-size: 1.1rem; font-weight: 600;">Usuario {{ todo.user_id }}</div>
+            </div>
+            
+            <div style="grid-column: 1 / -1;">
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Título</label>
+                <div style="font-size: 1.1rem; line-height: 1.5; margin-top: 0.5rem;">{{ todo.title }}</div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Estado</label>
+                <div style="margin-top: 0.5rem;">
+                    <span class="{% if todo.completed %}status-completed{% else %}status-pending{% endif %}">
+                        {{ todo.status_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Creado</label>
+                <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{ todo.created_at|date:"d/m/Y H:i:s" }}</div>
+            </div>
+            
+            <div>
+                <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Actualizado</label>
+                <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{ todo.updated_at|date:"d/m/Y H:i:s" }}</div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+        <button onclick="toggleTodoStatus({{ todo.api_id }})" class="btn btn-warning">
+            🔄 Cambiar Estado
+        </button>
+        <a href="{% url 'todos:todo_edit' todo.api_id %}" class="btn btn-success">✏️ Editar</a>
+        <a href="{% url 'todos:todo_delete' todo.api_id %}" class="btn btn-danger">🗑️ Eliminar</a>
+        <a href="{% url 'todos:todo_list_full' %}" class="btn">📋 Volver a Lista</a>
+        <a href="{% url 'todos:index' %}" class="btn">🏠 Dashboard</a>
+    </div>
+</div>
+{% endblock %}

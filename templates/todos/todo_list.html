@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h2>{{ title }}</h2>
+
+    <div class="card" style="padding: 1rem; margin-bottom: 1.5rem; text-align: center;">
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">{{ todos|length }}</span>
+        <span style="color: var(--text-light); margin-left: 0.5rem;">registros encontrados</span>
+    </div>
+
+    {% if todos %}
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table>
+                <thead>
+                    <tr>
+                        {% if show_only == 'ids' %}
+                            <th>🆔 ID</th>
+                        {% elif show_only == 'ids_titles' %}
+                            <th>🆔 ID</th>
+                            <th>📝 Título</th>
+                        {% elif show_only == 'ids_userids' %}
+                            <th>🆔 ID</th>
+                            <th>👤 Usuario</th>
+                        {% elif show_only == 'full' %}
+                            <th>🆔 ID</th>
+                            <th>👤 Usuario</th>
+                            <th>📝 Título</th>
+                            <th>✅ Estado</th>
+                            <th>📅 Creado</th>
+                            <th>🔧 Acciones</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}
+                        <tr>
+                            {% if show_only == 'ids' %}
+                                <td><strong>#{{ todo.api_id }}</strong></td>
+                            {% elif show_only == 'ids_titles' %}
+                                <td><strong>#{{ todo.api_id }}</strong></td>
+                                <td>{{ todo.title|truncatechars:60 }}</td>
+                            {% elif show_only == 'ids_userids' %}
+                                <td><strong>#{{ todo.api_id }}</strong></td>
+                                <td>Usuario {{ todo.user_id }}</td>
+                            {% elif show_only == 'full' %}
+                                <td><strong>#{{ todo.api_id }}</strong></td>
+                                <td>Usuario {{ todo.user_id }}</td>
+                                <td>{{ todo.title|truncatechars:50 }}</td>
+                                <td>
+                                    <span class="{% if todo.completed %}status-completed{% else %}status-pending{% endif %}">
+                                        {{ todo.status_display }}
+                                    </span>
+                                    <button onclick="toggleTodoStatus({{ todo.api_id }})" 
+                                            style="background: none; border: none; cursor: pointer; margin-left: 0.5rem; font-size: 1.1rem;" 
+                                            title="Cambiar estado">
+                                        🔄
+                                    </button>
+                                </td>
+                                <td style="font-size: 0.875rem; color: var(--text-light);">
+                                    {{ todo.created_at|date:"d/m/Y H:i" }}
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 0.25rem;">
+                                        <a href="{% url 'todos:todo_detail' todo.api_id %}" 
+                                           class="btn" 
+                                           style="padding: 0.5rem; font-size: 0.75rem;" 
+                                           title="Ver detalle">👁️</a>
+                                        <a href="{% url 'todos:todo_edit' todo.api_id %}" 
+                                           class="btn btn-warning" 
+                                           style="padding: 0.5rem; font-size: 0.75rem;" 
+                                           title="Editar">✏️</a>
+                                        <a href="{% url 'todos:todo_delete' todo.api_id %}" 
+                                           class="btn btn-danger" 
+                                           style="padding: 0.5rem; font-size: 0.75rem;" 
+                                           title="Eliminar">🗑️</a>
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="card" style="text-align: center; padding: 3rem; background: var(--background);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="color: var(--text-light);">No hay datos disponibles</h3>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">
+                No se encontraron TODOs con los criterios especificados.
+            </p>
+            <a href="{% url 'todos:sync' %}" class="btn btn-warning">🔄 Sincronizar con API</a>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 2rem; text-align: center;">
+        <a href="{% url 'todos:index' %}" class="btn">🏠 Volver al Dashboard</a>
+        {% if show_only == 'full' %}
+            <a href="{% url 'todos:todo_create' %}" class="btn btn-success">➕ Crear Nuevo TODO</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
